@@ -42,9 +42,9 @@
                      @{@"key": @"animateX", @"label": @"Animate X"},
                      @{@"key": @"animateY", @"label": @"Animate Y"},
                      @{@"key": @"animateXY", @"label": @"Animate XY"},
-                     @{@"key": @"toggleAdjustXLegend", @"label": @"Toggle AdjustXLegend"},
                      @{@"key": @"saveToGallery", @"label": @"Save to Camera Roll"},
                      @{@"key": @"togglePinchZoom", @"label": @"Toggle PinchZoom"},
+                     @{@"key": @"toggleAutoScaleMinMax", @"label": @"Toggle auto scale min/max"},
                      ];
     
     _chartView.delegate = self;
@@ -52,16 +52,24 @@
     _chartView.descriptionText = @"";
     _chartView.noDataTextDescription = @"You need to provide data for the chart.";
     
+    _chartView.drawBordersEnabled = YES;
+    
+    _chartView.leftAxis.drawAxisLineEnabled = NO;
+    _chartView.leftAxis.drawGridLinesEnabled = NO;
+    _chartView.rightAxis.drawAxisLineEnabled = NO;
+    _chartView.rightAxis.drawGridLinesEnabled = NO;
+    _chartView.xAxis.drawAxisLineEnabled = NO;
+    _chartView.xAxis.drawGridLinesEnabled = NO;
+
     _chartView.drawGridBackgroundEnabled = NO;
-    _chartView.highlightEnabled = YES;
     _chartView.dragEnabled = YES;
     [_chartView setScaleEnabled:YES];
     _chartView.pinchZoomEnabled = NO;
     
     _chartView.legend.position = ChartLegendPositionRightOfChart;
     
-    _sliderX.value = 19.f;
-    _sliderY.value = 10.f;
+    _sliderX.value = 19.0;
+    _sliderY.value = 10.0;
     [self slidersValueChanged:nil];
 }
 
@@ -71,7 +79,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)setDataCount:(int)count range:(float)range
+- (void)setDataCount:(int)count range:(double)range
 {
     NSMutableArray *xVals = [[NSMutableArray alloc] init];
     
@@ -90,13 +98,13 @@
         
         for (int i = 0; i < count; i++)
         {
-            float val = (float) (arc4random_uniform(range) + 3);
+            double val = (double) (arc4random_uniform(range) + 3);
             [values addObject:[[ChartDataEntry alloc] initWithValue:val xIndex:i]];
         }
         
         LineChartDataSet *d = [[LineChartDataSet alloc] initWithYVals:values label:[NSString stringWithFormat:@"DataSet %d", z + 1]];
-        d.lineWidth = 2.5f;
-        d.circleRadius = 4.f;
+        d.lineWidth = 2.5;
+        d.circleRadius = 4.0;
         
         UIColor *color = colors[z % colors.count];
         [d setColor:color];
@@ -157,8 +165,7 @@
     
     if ([key isEqualToString:@"toggleHighlight"])
     {
-        _chartView.highlightEnabled = !_chartView.isHighlightEnabled;
-        
+        _chartView.data.highlightEnabled = !_chartView.data.isHighlightEnabled;
         [_chartView setNeedsDisplay];
     }
     
@@ -185,15 +192,6 @@
         [_chartView animateWithXAxisDuration:3.0 yAxisDuration:3.0];
     }
     
-    if ([key isEqualToString:@"toggleAdjustXLegend"])
-    {
-        ChartXAxis *xLabels = _chartView.xAxis;
-        
-        xLabels.adjustXLabelsEnabled = !xLabels.isAdjustXLabelsEnabled;
-        
-        [_chartView setNeedsDisplay];
-    }
-    
     if ([key isEqualToString:@"saveToGallery"])
     {
         [_chartView saveToCameraRoll];
@@ -204,6 +202,12 @@
         _chartView.pinchZoomEnabled = !_chartView.isPinchZoomEnabled;
         
         [_chartView setNeedsDisplay];
+    }
+    
+    if ([key isEqualToString:@"toggleAutoScaleMinMax"])
+    {
+        _chartView.autoScaleMinMaxEnabled = !_chartView.isAutoScaleMinMaxEnabled;
+        [_chartView notifyDataSetChanged];
     }
 }
 

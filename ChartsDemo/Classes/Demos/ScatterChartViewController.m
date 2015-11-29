@@ -39,9 +39,9 @@
                      @{@"key": @"animateX", @"label": @"Animate X"},
                      @{@"key": @"animateY", @"label": @"Animate Y"},
                      @{@"key": @"animateXY", @"label": @"Animate XY"},
-                     @{@"key": @"toggleAdjustXLegend", @"label": @"Toggle AdjustXLegend"},
                      @{@"key": @"saveToGallery", @"label": @"Save to Camera Roll"},
                      @{@"key": @"togglePinchZoom", @"label": @"Toggle PinchZoom"},
+                     @{@"key": @"toggleAutoScaleMinMax", @"label": @"Toggle auto scale min/max"},
                      ];
     
     _chartView.delegate = self;
@@ -50,7 +50,6 @@
     _chartView.noDataTextDescription = @"You need to provide data for the chart.";
     
     _chartView.drawGridBackgroundEnabled = NO;
-    _chartView.highlightEnabled = YES;
     _chartView.dragEnabled = YES;
     [_chartView setScaleEnabled:YES];
     _chartView.maxVisibleValueCount = 200;
@@ -69,8 +68,8 @@
     xl.labelFont = [UIFont fontWithName:@"HelveticaNeue-Light" size:10.f];
     xl.drawGridLinesEnabled = NO;
     
-    _sliderX.value = 45.f;
-    _sliderY.value = 100.f;
+    _sliderX.value = 45.0;
+    _sliderY.value = 100.0;
     [self slidersValueChanged:nil];
 }
 
@@ -80,7 +79,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)setDataCount:(int)count range:(float)range
+- (void)setDataCount:(int)count range:(double)range
 {
     NSMutableArray *xVals = [[NSMutableArray alloc] init];
     
@@ -95,13 +94,13 @@
     
     for (int i = 0; i < count; i++)
     {
-        float val = (float) (arc4random_uniform(range)) + 3;
+        double val = (double) (arc4random_uniform(range)) + 3;
         [yVals1 addObject:[[ChartDataEntry alloc] initWithValue:val xIndex:i]];
         
-        val = (float) (arc4random_uniform(range)) + 3;
+        val = (double) (arc4random_uniform(range)) + 3;
         [yVals2 addObject:[[ChartDataEntry alloc] initWithValue:val xIndex:i]];
         
-        val = (float) (arc4random_uniform(range)) + 3;
+        val = (double) (arc4random_uniform(range)) + 3;
         [yVals3 addObject:[[ChartDataEntry alloc] initWithValue:val xIndex:i]];
     }
     
@@ -115,9 +114,9 @@
     set3.scatterShape = ScatterShapeCross;
     [set3 setColor:ChartColorTemplates.colorful[2]];
     
-    set1.scatterShapeSize = 8.f;
-    set2.scatterShapeSize = 8.f;
-    set3.scatterShapeSize = 8.f;
+    set1.scatterShapeSize = 8.0;
+    set2.scatterShapeSize = 8.0;
+    set3.scatterShapeSize = 8.0;
     
     NSMutableArray *dataSets = [[NSMutableArray alloc] init];
     [dataSets addObject:set1];
@@ -174,8 +173,7 @@
     
     if ([key isEqualToString:@"toggleHighlight"])
     {
-        _chartView.highlightEnabled = !_chartView.isHighlightEnabled;
-        
+        _chartView.data.highlightEnabled = !_chartView.data.isHighlightEnabled;
         [_chartView setNeedsDisplay];
     }
     
@@ -202,15 +200,6 @@
         [_chartView animateWithXAxisDuration:3.0 yAxisDuration:3.0];
     }
     
-    if ([key isEqualToString:@"toggleAdjustXLegend"])
-    {
-        ChartXAxis *xLabels = _chartView.xAxis;
-        
-        xLabels.adjustXLabelsEnabled = !xLabels.isAdjustXLabelsEnabled;
-        
-        [_chartView setNeedsDisplay];
-    }
-    
     if ([key isEqualToString:@"saveToGallery"])
     {
         [_chartView saveToCameraRoll];
@@ -221,6 +210,12 @@
         _chartView.pinchZoomEnabled = !_chartView.isPinchZoomEnabled;
         
         [_chartView setNeedsDisplay];
+    }
+    
+    if ([key isEqualToString:@"toggleAutoScaleMinMax"])
+    {
+        _chartView.autoScaleMinMaxEnabled = !_chartView.isAutoScaleMinMaxEnabled;
+        [_chartView notifyDataSetChanged];
     }
 }
 

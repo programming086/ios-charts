@@ -12,6 +12,8 @@
 //
 
 import Foundation
+import CoreGraphics
+import UIKit
 
 public class RadarChartData: ChartData
 {
@@ -20,9 +22,18 @@ public class RadarChartData: ChartData
     public var highlightLineDashPhase = CGFloat(0.0)
     public var highlightLineDashLengths: [CGFloat]?
     
-    internal override func initialize(dataSets: [ChartDataSet])
+    public override init()
     {
-        super.initialize(dataSets);
-        
+        super.init()
+    }
+    
+    public override init(xVals: [String?]?, dataSets: [ChartDataSet]?)
+    {
+        super.init(xVals: xVals, dataSets: dataSets)
+    }
+    
+    public override init(xVals: [NSObject]?, dataSets: [ChartDataSet]?)
+    {
+        super.init(xVals: xVals, dataSets: dataSets)
     }
 }

@@ -40,7 +40,6 @@
                      @{@"key": @"animateY", @"label": @"Animate Y"},
                      @{@"key": @"animateXY", @"label": @"Animate XY"},
                      @{@"key": @"toggleStartZero", @"label": @"Toggle StartZero"},
-                     @{@"key": @"toggleAdjustXLegend", @"label": @"Toggle AdjustXLegend"},
                      @{@"key": @"saveToGallery", @"label": @"Save to Camera Roll"},
                      @{@"key": @"togglePinchZoom", @"label": @"Toggle PinchZoom"},
                      ];
@@ -57,7 +56,7 @@
     
     ChartXAxis *xAxis = _chartView.xAxis;
     xAxis.labelPosition = XAxisLabelPositionBottom;
-    xAxis.spaceBetweenLabels = 0.f;
+    xAxis.spaceBetweenLabels = 0.0;
     xAxis.drawGridLinesEnabled = NO;
     
     _chartView.leftAxis.drawGridLinesEnabled = NO;
@@ -65,8 +64,8 @@
     
     _chartView.legend.enabled = NO;
     
-    _sliderX.value = 9.f;
-    _sliderY.value = 100.f;
+    _sliderX.value = 9.0;
+    _sliderY.value = 100.0;
     [self slidersValueChanged:nil];
 }
 
@@ -76,14 +75,14 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)setDataCount:(int)count range:(float)range
+- (void)setDataCount:(int)count range:(double)range
 {
     NSMutableArray *yVals = [[NSMutableArray alloc] init];
     
     for (int i = 0; i < count; i++)
     {
-        float mult = (range + 1);
-        float val = (float) (arc4random_uniform(mult)) + mult / 3.f;
+        double mult = (range + 1);
+        double val = (double) (arc4random_uniform(mult)) + mult / 3.0;
         [yVals addObject:[[BarChartDataEntry alloc] initWithValue:val xIndex:i]];
     }
     
@@ -119,8 +118,7 @@
     
     if ([key isEqualToString:@"toggleHighlight"])
     {
-        _chartView.highlightEnabled = !_chartView.isHighlightEnabled;
-        
+        _chartView.data.highlightEnabled = !_chartView.data.isHighlightEnabled;
         [_chartView setNeedsDisplay];
     }
     
@@ -152,15 +150,6 @@
     if ([key isEqualToString:@"animateXY"])
     {
         [_chartView animateWithXAxisDuration:3.0 yAxisDuration:3.0];
-    }
-    
-    if ([key isEqualToString:@"toggleAdjustXLegend"])
-    {
-        ChartXAxis *xLabels = _chartView.xAxis;
-        
-        xLabels.adjustXLabelsEnabled = !xLabels.isAdjustXLabelsEnabled;
-        
-        [_chartView setNeedsDisplay];
     }
     
     if ([key isEqualToString:@"saveToGallery"])

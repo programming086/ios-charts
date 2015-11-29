@@ -1,8 +1,11 @@
-**Version 2.0.8**, synced to [MPAndroidChart #1000b5d](https://github.com/PhilJay/MPAndroidChart/commit/1000b5d9b1347cd8b626aa034866d17c3351cdef)
+**Version 2.1.6**, synced to [MPAndroidChart #0c97941](https://github.com/PhilJay/MPAndroidChart/commit/0c97941)
 
 ![alt tag](https://raw.github.com/danielgindi/ios-charts/master/Assets/feature_graphic.png)
+  ![Supported Platforms](https://img.shields.io/cocoapods/p/Charts.svg) [![Releases](https://img.shields.io/github/release/danielgindi/ios-charts.svg)](https://github.com/danielgindi/ios-charts/releases) [![Latest pod release](https://img.shields.io/cocoapods/v/Charts.svg)](http://cocoapods.org/pods/charts)
 
-Requires **Swift 1.2**, introduced in Xcode 6.3. **Requires Xcode 6.3 beta 4!**
+* Xcode 7 / Swift 2.0
+* iOS 7.0 (Drag .swift files to your project)
+* iOS 8.0 / 9.0 (Use as an **Embedded** Framework)
 
 Okay so there's this beautiful library called [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart) by [Philipp Jahoda](https://www.linkedin.com/in/philippjahoda) which has become very popular amongst Android developers, and in the meanwhile there's no decent charting solution for iOS.
 
@@ -10,13 +13,39 @@ I've chosen to write it in `Swift` as it can be highly optimized by the compiler
 
 **An amazing feature** of this library now, both Android and iOS, is the time it saves you when developing for both platforms, as the learning curve is singleton- it happens only once, and the code stays very similar so developers don't have to go around and re-invent the app to produce the same output with a different library. (And that's not even considering the fact that there's not really another good choice out there currently...)
 
-## Getting Noticed
+## Usage
 
-Since a few days ago when the library went live on GitHub it has received a lot of attention!  
-There are users coming here from blogs, stackoverflow, reddit etc.  
-Appreciation is show by newsletters like: https://darrellnicholas-com.curated.co/issues/3?#start. 
-So this means that a lot of people need this library, which is a big reason to contribute!
-Please see the "help" section :)
+In order to correctly compile:
+
+1. Drag the `Charts.xcodeproj` to your project  
+2. Go to your target's settings, hit the "+" under the "Embedded Binaries" section, and select the Charts.framework  
+3. **Temporary workaround**: Xcode 6.3.1 has a bug, where you have to build your project once before actually writing the `@import` line. So hit "Build" now!  
+4. `@import Charts`  
+5.  When using Swift in an ObjC project:
+   - You need to import your Bridging Header. Usually it is "*YourProject-Swift.h*", so in ChartsDemo it's "*ChartsDemo-Swift.h*". Do not try to actually include "*ChartsDemo-Swift.h*" in your project :-)
+   - Under "Build Options", mark "Embedded Content Contains Swift Code"
+
+
+If you want to compile for iOS 7:
+
+1. Drag the code itself (.swift files) to your project. As sadly, Swift currently does not support compiling Frameworks for iOS 7.
+2. Make sure that the files are added to the Target membership.
+
+## CocoaPods Install
+
+Add `pod 'Charts'` to your Podfile. "Charts" is the name of the library.  
+**Note:** ~~`pod 'ios-charts'`~~ is not the correct library, and refers to a different project by someone else.
+
+## Carthage Install
+
+Charts now include Carthage prebuilt binaries.
+
+```carthage
+github "danielgindi/ios-charts" == 2.1.6
+github "danielgindi/ios-charts" ~> 2.1.6
+```
+
+In order to build the binaries for a new release, use `carthage build --no-skip-current && carthage archive Charts`.
 
 ## Help
 
@@ -24,7 +53,7 @@ If you like what you see here, and want to support the work being done in this r
 * Contribute code, issues and pull requests
 * Let people know this library exists (spread the word!)
 * 
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=CHRDHZE79YTMQ)
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=68UL6Y8KUPS96) (You can buy me a beer, or you can buy me dinner :-)
 
 **Note:** The author of [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart) is the reason that this library exists, and is accepting [donations](https://github.com/PhilJay/MPAndroidChart#donations) on his page. He deserves them!
 
@@ -34,7 +63,8 @@ Questions & Issues
 If you are having questions or problems, you should:
 
  - Make sure you are using the latest version of the library. Check the [**release-section**](https://github.com/danielgindi/ios-charts/releases).
- - Study the [**Documentation-Wiki**](https://github.com/PhilJay/MPAndroidChart/wiki)
+ - Study the Android version's [**Documentation-Wiki**](https://github.com/PhilJay/MPAndroidChart/wiki)
+ - Study the (Still incomplete [![Doc-Percent](https://img.shields.io/cocoapods/metrics/doc-percent/Charts.svg)](http://cocoadocs.org/docsets/Charts/2.1.6)) [**Pod-Documentation**](http://cocoadocs.org/docsets/Charts/2.1.6)
  - Search or open questions on [**stackoverflow**](http://stackoverflow.com/questions/tagged/ios-charts) with the `ios-charts` tag
  - Search [**known issues**](https://github.com/danielgindi/ios-charts/issues) for your problem (open and closed)
  - Create new issues (please **search known issues before**, do not create duplicate issues)
@@ -44,14 +74,15 @@ Features
 =======
 
 **Core features:**
+ - 8 different chart types
  - Scaling on both axes (with touch-gesture, axes separately or pinch-zoom)
  - Dragging / Panning (with touch-gesture)
- - Combined-Charts (line-, bar-, scatter-, candle-data)
+ - Combined-Charts (line-, bar-, scatter-, candle-stick-, bubble-)
  - Dual (separate) Y-Axis
  - Finger drawing (draw values into the chart with touch-gesture)
  - Highlighting values (with customizeable popup-views)
  - Multiple / Separate Axes
- - Save chart to camera-roll
+ - Save chart to camera-roll / export to PNG/JPEG
  - Predefined color templates
  - Legends (generated automatically, customizeable)
  - Customizeable Axes (both x- and y-axis)
@@ -63,6 +94,7 @@ Features
 
 *Screenshots are currently taken from the original repository, as they render exactly the same :-)*
 
+
  - **LineChart (with legend, simple design)**
 ![alt tag](https://raw.github.com/PhilJay/MPChart/master/screenshots/simpledesign_linechart4.png)
  - **LineChart (with legend, simple design)**
@@ -70,9 +102,6 @@ Features
 
  - **LineChart (cubic lines)**
 ![alt tag](https://raw.github.com/PhilJay/MPChart/master/screenshots/cubiclinechart.png)
-
- - **LineChart (single DataSet)**
-![alt tag](https://raw.github.com/PhilJay/MPChart/master/screenshots/linechart.png)
 
  - **Combined-Chart (bar- and linechart in this case)**
 ![alt tag](https://raw.github.com/PhilJay/MPChart/master/screenshots/combined_chart.png)
@@ -87,7 +116,7 @@ Features
 
  - **Horizontal-BarChart**
 
-![alt tag](https://raw.github.com/PhilJay/MPChart/master/screenshots/horizontal_barchart.jpg)
+![alt tag](https://raw.github.com/PhilJay/MPChart/master/screenshots/horizontal_barchart.png)
 
 
  - **PieChart (with selection, ...)**
@@ -102,6 +131,10 @@ Features
 
 ![alt tag](https://raw.github.com/PhilJay/MPAndroidChart/master/screenshots/candlestickchart.png)
 
+ - **BubbleChart** (area covered by bubbles indicates the value)
+
+![alt tag](https://raw.github.com/PhilJay/MPAndroidChart/master/screenshots/bubblechart.png)
+
  - **RadarChart** (spider web chart)
 
 ![alt tag](https://raw.github.com/PhilJay/MPAndroidChart/master/screenshots/radarchart.png)
@@ -113,6 +146,12 @@ Currently there's no need for documentation for the iOS version, as the API is *
 You can read the official [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart) documentation here: [**Wiki**](https://github.com/PhilJay/MPAndroidChart/wiki)
 
 Or you can see the [**ChartsDemo**](https://github.com/danielgindi/ios-charts/tree/master/ChartsDemo) project and learn the how-tos from it.
+
+
+Special Thanks
+=======
+
+Goes to [@liuxuan30](https://github.com/liuxuan30), [@petester42](https://github.com/petester42) and  [@AlBirdie](https://github.com/AlBirdie) for new features, bugfixes, and lots and lots of involvement in our open-sourced community! You guys are a huge help to all of those coming here with questions and issues, and I couldn't respond to all of those without you. 
 
 License
 =======
